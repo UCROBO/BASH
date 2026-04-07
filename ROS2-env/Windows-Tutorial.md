@@ -6,7 +6,7 @@
 
 # 1. Introduction
 
-Welcome to this workshop! By the end of this session you will have a fully working Linux ROS2 robotics environment running directly on your Windows computer — no dual boot, no complicated setup, no wiping your hard drive.
+Welcome to this workshop! By the end of this session you will have a fully working Linux ROS2 robotics environment running directly on your Windows computer.
 
 We will do this using two tools: WSL and Docker. You do not need to know anything about either of them to get started — this booklet will walk you through every step and explain what is happening along the way.
 
@@ -64,7 +64,7 @@ Before we start, make sure your computer meets the following requirements. If yo
 
 WSL is built into Windows — we just need to turn it on. We are installing the WSL2 engine only — we do not need a default Linux distribution at this stage because we will be building our own purpose-built environment shortly.
 
-### Step 1 — Open PowerShell as Administrator
+### 3.1 — Open PowerShell as Administrator
 
 PowerShell is Windows' built-in command-line tool. We need to open it with Administrator privileges so it has permission to install system features.
 
@@ -81,7 +81,7 @@ cd C:\Users\$env:USERNAME
 
 > ⚠️ **Important:** You must open PowerShell **as Administrator** — not just regular PowerShell. If you skip this, the install command will fail with a permissions error.
 
-### Step 2 — Run the install command
+### 3.2 — Run the install command
 
 In the PowerShell window, type the following and press Enter:
 
@@ -98,11 +98,11 @@ Installing: Windows Subsystem for Linux
 Windows Subsystem for Linux has been installed.
 ```
 
-### Step 3 — Restart your computer
+### 3.3 — Restart your computer
 
 WSL requires a full system restart to finish installing. Save any open work and restart before continuing.
 
-### Step 4 — Verify WSL is working
+### 3.4 — Verify WSL is working
 
 After restarting, open PowerShell and run:
 
@@ -130,7 +130,7 @@ Default Version: 2
 
 Now that WSL is running we can install Docker Desktop. Docker Desktop is the application we will use to build our robotics environment. It runs on Windows and uses the WSL2 engine we just installed under the hood.
 
-### Step 1 — Download Docker Desktop
+### 4.1 — Download Docker Desktop
 
 Open a web browser and go to **https://www.docker.com/products/docker-desktop**
 
@@ -138,7 +138,7 @@ Click **"Download for Windows"** and run the installer when it finishes download
 
 > ✅ **During installation, make sure this option is checked:** "Use WSL 2 instead of Hyper-V" — this ensures Docker uses the WSL2 engine we just installed.
 
-### Step 2 — Complete the installation and launch Docker Desktop
+### 4.2 — Complete the installation and launch Docker Desktop
 
 Follow the installer prompts and click Finish. Docker Desktop will launch automatically. It may take a minute or two to fully start up for the first time — you will see a loading animation in the Docker Desktop window.
 
@@ -157,11 +157,11 @@ Follow the installer prompts and click Finish. Docker Desktop will launch automa
 
 Before we build the full robotics environment, let's confirm Docker is working correctly. We will do this by running a small test container called "hello-world."
 
-### Step 1 — Open PowerShell
+### 5.1 — Open PowerShell
 
 Open PowerShell — it does not need to be Administrator this time.
 
-### Step 2 — Run the Hello World container
+### 5.2 — Run the Hello World container
 
 Type the following and press Enter:
 
@@ -184,7 +184,7 @@ This message shows that your installation appears to be working correctly.
 
 > ✅ **If you see "Hello from Docker!" — Docker is working correctly.**
 
-### Step 3 — Check Docker Desktop
+### 5.3 — Check Docker Desktop
 
 Switch over to the **Docker Desktop** app. Click **"Images"** in the left sidebar — you should see `hello-world` listed there.
 
@@ -207,7 +207,7 @@ From this point all commands are run in **PowerShell** unless told otherwise.
 
 ---
 
-### Step 1 — Install Git
+### 6.1 — Install Git
 
 We need Git to download the lab repository. Check if it is already installed by running:
 
@@ -241,7 +241,7 @@ git version 2.44.0.windows.1
 
 ---
 
-### Step 2 — Clone the lab repository
+### 6.2 — Clone the lab repository
 
 ```powershell
 git clone https://github.com/UCROBO/foundations-of-robotics-labs.git
@@ -252,7 +252,7 @@ cd foundations-of-robotics-labs
 
 ---
 
-### Step 3 — Build the Docker image
+### 6.3 — Build the Docker image
 
 ```powershell
 docker build -t frlab -f .binder/Dockerfile.wsl .
@@ -275,7 +275,7 @@ Successfully tagged frlab:latest
 
 ---
 
-### Step 4 — Export the image to a file
+### 6.4 — Export the image to a file
 
 ```powershell
 $containerId = docker create frlab
@@ -288,7 +288,7 @@ This may take a minute or two with no progress shown — this is normal. When yo
 
 ---
 
-### Step 5 — Import into WSL as RoboticsLab
+### 6.5 — Import into WSL as RoboticsLab
 
 ```powershell
 New-Item -ItemType Directory -Path C:\Users\$env:USERNAME\AppData\Local\RoboticsLab
@@ -303,7 +303,7 @@ wsl --import RoboticsLab C:\Users\$env:USERNAME\AppData\Local\RoboticsLab C:\Use
 
 ---
 
-### Step 6 — Verify it worked
+### 6.6 — Verify it worked
 
 ```powershell
 wsl --list --verbose
@@ -320,7 +320,7 @@ You should see:
 
 ---
 
-### Step 7 — Test ROS2 is installed
+### 6.7 — Test ROS2 is installed
 
 Open your new environment:
 
@@ -338,31 +338,38 @@ If you see a list of ROS2 commands, ROS2 is installed and working.
 
 > ✅ **ROS2 is installed and working.**
 
-Type `exit` to return to PowerShell.
 
 ---
+### 6.8 — Test graphical applications
 
-### Step 8 — Test a graphical application
+Let's confirm WSLg is working by launching a series of graphical ROS2 tools. Each of these should open as a window on your Windows desktop.
 
-Let's confirm WSLg is working by launching a graphical ROS2 tool:
-
-```powershell
-wsl -d RoboticsLab
-```
-
+**Test rqt:**
 ```bash
 rqt
 ```
 
-A graphical window should appear on your Windows desktop.
+> ✅ **If the rqt window appears — basic graphical applications are working.**
 
-> ✅ **If you see the rqt window — graphical applications are working perfectly via WSLg.**
+Close rqt and test RViz:
+```bash
+rviz2
+```
+
+> ✅ **If the RViz window appears — 3D visualisation is working.**
+
+Close RViz and test the TurtleBot3 Gazebo simulation:
+```bash
+export TURTLEBOT3_MODEL=burger
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+```
+
+> ✅ **If the Gazebo simulation window appears with a robot in it — your full simulation environment is working.**
+
+> ⚠️ **Gazebo may take a minute to load the first time** — this is normal. If it does not open after 2-3 minutes press Ctrl+C and try again.
 
 Type `exit` when done.
-
----
-
-### Step 9 — Clean up
+### 6.9 — Clean up
 
 Remove the tar file to free up space:
 
@@ -380,7 +387,7 @@ docker rmi frlab
 
 ---
 
-### Step 10 — Set up your Windows Terminal profile
+### 6.10 — Set up your Windows Terminal profile
 
 Now we give your environment its own named tab in Windows Terminal.
 
@@ -404,7 +411,7 @@ Fill in the following:
 
 ---
 
-### Step 11 — Open your Robotics Lab
+### 6.11 — Open your Robotics Lab
 
 Click the dropdown in Windows Terminal and select **Robotics Lab.**
 
@@ -420,6 +427,5 @@ root@LAPTOP-XXXXX:~#
 
 ## What if something breaks?
 
-If your environment ever gets into a bad state, rebuilding it is straightforward. Simply repeat Steps 3–9 of this section — rebuild the Docker image, export it, and re-import it. A completely fresh working environment in minutes, without touching anything else on your computer.
-
+If your environment ever gets into a bad state, rebuilding it is straightforward. Simply repeat Steps 3–9 of this section — rebuild the Docker image, export it, and re-import it. 
 ---
